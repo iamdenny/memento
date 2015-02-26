@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Memento.js by iamdenny</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Memento.js</h1>
+        <p>An undo/redo library for AngularJS.</p>
+        <p class="view"><a href="https://github.com/iamdenny/memento">View the Project on GitHub <small>iamdenny/memento</small></a></p>
+        <ul>
+          <li><a href="https://github.com/iamdenny/memento/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/iamdenny/memento/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/iamdenny/memento">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="mementojs" class="anchor" href="#mementojs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Memento.js</h1>
+
+<p>Memento.js is a small Angular module intended to provide undo and redo support. It uses an Angular factory to provide tracking for any object you can place into it.</p>
+
+<p>This library is in its first stages of life - as such, it's currently learning to walk.</p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage:</h2>
+
+<p>To use Memento, add the 'Memento' module as an an app dependency.</p>
+
+<pre><code>angular.module('myApp', ['Memento'])
+</code></pre>
+
+<p>Memento is designed to support multiple storage methods; the method can be chosen in a configuration block, like so:</p>
+
+<pre><code>myApp.config(['MementoProvider', function (MementoProvider) {
+    // Here, we can configure Memento to use a different storage method.
+    MementoProvider.setStorageMethod('window'); // also indexedDb, webSql, localStorage
+}])
+</code></pre>
+
+<p><em>NOTE: Memento currently only supports the 'window' storage method at this time.</em></p>
+
+<p>With Memento as an app dependency, we can now inject Memento into a controller and create new instances.</p>
+
+<pre><code>myApp.controller('main', function ($scope, Memento) {
+    $scope.tasks = [
+        { name: 'Update the memento.js README file' },
+        { name: 'Add JSON deltas to main branch' }
+    ];
+
+    var memento = new Memento($scope.tasks);
+    or
+    var memento = new Memento($scope.tasks, 20); // you can set up the max history as 20
+</code></pre>
+
+<p>A Memento object acts as a stack of states for a given object. Thus, it exposes stack-like methods.</p>
+
+<ul>
+<li>
+<code>push(obj).then(function (result) {})</code>: Push an object onto the Memento stack, storing its state.</li>
+<li>
+<code>undo().then(function (result) {})</code>: Move backwards in the stack; return the previous state.</li>
+<li>
+<code>redo().then(function (result) {})</code>: Move forwards in the stack; return the next state.</li>
+<li>
+<code>revert().then(function (result) {})</code>: Return the original (first stored) object. This does not clear the stack.</li>
+<li>
+<code>canUndo().then(function (result) {})</code>: Returns true if we can move backwards in the stack - the object has a previous state.</li>
+<li>
+<code>canRedo().then(function (result) {})</code>: Returns true if we can move forwards in the stack - the object has a redo state.</li>
+</ul>
+
+<p>Rudimentary usage examples are provided in the <code>examples</code> directory.</p>
+
+<h2>
+<a id="tentative-roadmap" class="anchor" href="#tentative-roadmap" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tentative roadmap:</h2>
+
+<ul>
+<li>Memento stores copies of changed objects in memory. This is inefficient and wasteful - plan to use jsondiffpatch (<a href="https://github.com/benjamine/jsondiffpatch">https://github.com/benjamine/jsondiffpatch</a>) to store deltas.</li>
+<li>Swappable storage solutions for deltas - sessionstorage, memory, xhr perhaps.</li>
+</ul>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/iamdenny">iamdenny</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
