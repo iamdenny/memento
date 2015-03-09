@@ -1,3 +1,10 @@
+/*
+ memento.localStorage.js
+ copyright (c) 2015 Naver corp.
+ Author: iamdenny hi.iamdenny@navercorp.com
+ License: MIT
+*/
+
 (function (window, module, ng, localforage, undefined) {
     'use strict';
 
